@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Control de gastos | Sebastián Chávez</title>
+  <meta name="description" content="Aplicación para registrar gastos personales en soles y ver en qué categoría se gasta más.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========== ENCABEZADO CON EL TOTAL ========== -->
+  <header class="app-header">
+    <div class="container header-inner">
+      <div>
+        <h1>Control de gastos</h1>
+        <p class="subtitle">Registra en qué gastas tu dinero y descubre a dónde se va.</p>
+      </div>
+      <div class="total-box">
+        <span class="total-label">Total gastado</span>
+        <!-- JavaScript cambia este texto cada vez que agregas o eliminas un gasto -->
+        <strong id="total-amount" class="total-amount">S/ 0.00</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="container layout">
+
+    <!-- ========== FORMULARIO ========== -->
+    <section class="panel" aria-labelledby="form-title">
+      <h2 id="form-title">Nuevo gasto</h2>
+
+      <!-- novalidate: la validación la hacemos nosotros en JavaScript -->
+      <form id="expense-form" novalidate>
+        <div class="field">
+          <label for="description">Descripción</label>
+          <input type="text" id="description" placeholder="Ej.: Almuerzo en la cafetería" maxlength="60">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="amount">Monto (S/)</label>
+            <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div class="field">
+            <label for="date">Fecha</label>
+            <input type="date" id="date">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="category">Categoría</label>
+          <select id="category">
+            <option value="Comida">Comida</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Estudios">Estudios</option>
+            <option value="Entretenimiento">Entretenimiento</option>
+            <option value="Servicios">Servicios</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+
+        <!-- Aquí JavaScript muestra los mensajes de error -->
+        <p id="form-error" class="form-error" role="alert"></p>
+
+        <button type="submit" class="button">Agregar gasto</button>
+      </form>
+    </section>
+
+    <!-- Columna derecha: dos paneles apilados -->
+    <div class="stack">
+
+      <!-- ========== RESUMEN POR CATEGORÍA ========== -->
+      <section class="panel" aria-labelledby="summary-title">
+        <h2 id="summary-title">Por categoría</h2>
+        <!-- Esta lista la llena JavaScript -->
+        <ul id="category-summary" class="category-summary"></ul>
+        <p id="summary-empty" class="empty">Cuando registres gastos, aquí verás en qué categoría gastas más.</p>
+      </section>
+
+      <!-- ========== CONVERSIÓN DE MONEDA (NUEVO) ========== -->
+      <section class="panel" aria-labelledby="converter-title">
+        <h2 id="converter-title">Total en otra moneda</h2>
+
+        <div class="field">
+          <label for="currency">Moneda</label>
+          <select id="currency">
+            <option value="USD">Dólar estadounidense (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="CLP">Peso chileno (CLP)</option>
+            <option value="COP">Peso colombiano (COP)</option>
+            <option value="MXN">Peso mexicano (MXN)</option>
+            <option value="BRL">Real brasileño (BRL)</option>
+            <option value="ARS">Peso argentino (ARS)</option>
+          </select>
+        </div>
+
+        <!-- JavaScript escribe aquí el total convertido y el tipo de cambio -->
+        <strong id="converted-amount" class="converted-amount">-</strong>
+        <p id="rate-info" class="rate-info"></p>
+
+        <!-- Mensajes de "cargando" o de error -->
+        <p id="converter-status" class="converter-status" role="status"></p>
+        <button id="retry-button" type="button" class="button-secondary" hidden>Reintentar</button>
+
+        <!-- La API pide este enlace como condición de uso gratuito -->
+        <p class="attribution">
+          <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">Rates By Exchange Rate API</a>
+        </p>
+      </section>
+
+    </div>
+
+    <!-- ========== HISTORIAL ========== -->
+    <section class="panel panel-wide" aria-labelledby="list-title">
+      <div class="panel-header">
+        <h2 id="list-title">Historial</h2>
+        <span id="expense-count" class="count">0 gastos</span>
+      </div>
+      <!-- Esta lista también la llena JavaScript -->
+      <ul id="expense-list" class="expense-list"></ul>
+      <p id="list-empty" class="empty">Todavía no registras gastos. Agrega el primero con el formulario.</p>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="container">
+      <p>
+        Proyecto 2 de mi <a href="https://luisch57.github.io">ruta de proyectos</a>.
+        Los datos se guardan solo en este navegador.
+      </p>
+    </div>
+  </footer>
+
+  <!-- El JavaScript va al final: así el HTML ya existe cuando el código lo busca -->
+  <script src="app.js"></script>
+</body>
+</html>
